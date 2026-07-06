@@ -16,18 +16,51 @@ export default function DetalleHerramienta() {
   const [miPuntuacion, setMiPuntuacion] = useState(5);
   const [miComentario, setMiComentario] = useState("");
 
+  const [error, setError] = useState(false);
+
   useEffect(() => {
     async function cargar() {
-      const { data: herramienta } = await supabase.from("herramientas").select("*, perfiles(nombre)").eq("id", id).single();
+      // 1. La herramienta (sin depender de la relacion con perfiles)
+      const { data: herramienta, error: errH } = await supabase
+        .from("herramientas")
+        .select("*")
+        .eq("id", id)
+        .maybeSingle();
+
+      if (errH || !herramienta) {
+        setError(true);
+        return;
+      }
+
+      // 2. El nombre del autor por separado (si falla, no rompe la ficha)
+      const { data: autor } = await supabase
+        .from("perfiles")
+        .select("nombre")
+        .eq("id", herramienta.dev_id)
+        .maybeSingle();
+      herramienta.perfiles = autor || { nombre: "desconocido" };
       setH(herramienta);
 
+      // 3. Valoraciones (con el nombre de cada autor por separado)
       const { data: vals } = await supabase
         .from("valoraciones")
-        .select("*, perfiles(nombre)")
+        .select("*")
         .eq("herramienta_id", id)
         .order("creado", { ascending: false });
-      setValoraciones(vals || []);
 
+      const valsConNombre = await Promise.all(
+        (vals || []).map(async (v) => {
+          const { data: p } = await supabase
+            .from("perfiles")
+            .select("nombre")
+            .eq("id", v.usuario_id)
+            .maybeSingle();
+          return { ...v, perfiles: p || { nombre: "usuario" } };
+        })
+      );
+      setValoraciones(valsConNombre);
+
+      // 4. Sesion y biblioteca
       const { data: u } = await supabase.auth.getUser();
       setUsuario(u.user);
       if (u.user) {
@@ -75,10 +108,33 @@ export default function DetalleHerramienta() {
     setMiComentario("");
     const { data: vals } = await supabase
       .from("valoraciones")
-      .select("*, perfiles(nombre)")
+      .select("*")
       .eq("herramienta_id", id)
       .order("creado", { ascending: false });
-    setValoraciones(vals || []);
+    const valsConNombre = await Promise.all(
+      (vals || []).map(async (v) => {
+        const { data: p } = await supabase
+          .from("perfiles")
+          .select("nombre")
+          .eq("id", v.usuario_id)
+          .maybeSingle();
+        return { ...v, perfiles: p || { nombre: "usuario" } };
+      })
+    );
+    setValoraciones(valsConNombre);
+  }
+
+  if (error) {
+    return (
+      <div style={{ textAlign: "center", padding: "50px 0" }}>
+        <p style={{ fontFamily: "var(--mono)", color: "var(--gris)" }}>
+          No se pudo cargar esta herramienta. Puede que se haya eliminado.
+        </p>
+        <a href="/" style={{ color: "var(--verde)", textDecoration: "underline", fontSize: 13 }}>
+          Volver al inicio
+        </a>
+      </div>
+    );
   }
 
   if (!h) return <p className="meta">Cargando…</p>;
