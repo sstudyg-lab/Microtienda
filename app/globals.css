@@ -1,0 +1,128 @@
+:root {
+  --papel: #f3f5f2;
+  --tarjeta: #ffffff;
+  --tinta: #131b17;
+  --gris: #5c6660;
+  --linea: #dde3de;
+  --verde: #0e6b4f;
+  --verde-suave: #e3f0ea;
+  --ambar: #b97e00;
+  --ambar-suave: #f7edd6;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --sans: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--papel);
+  color: var(--tinta);
+  font-family: var(--sans);
+}
+
+a { color: inherit; text-decoration: none; }
+
+.contenedor { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+
+/* Botones */
+.btn {
+  display: inline-block;
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: none;
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  color: #fff;
+  background: var(--verde);
+  text-align: center;
+}
+.btn:disabled { background: var(--linea); color: var(--gris); cursor: not-allowed; }
+.btn-secundario { background: var(--tarjeta); color: var(--verde); border: 1px solid var(--verde); }
+.btn-bloque { width: 100%; }
+
+/* Formularios */
+.etiqueta {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--gris);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: block;
+  margin-bottom: 5px;
+}
+.campo {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--linea);
+  font-size: 14px;
+  font-family: var(--sans);
+  color: var(--tinta);
+  background: var(--tarjeta);
+}
+.campo:focus { outline: 2px solid var(--verde); outline-offset: 1px; }
+
+/* Tarjetas */
+.tarjeta {
+  background: var(--tarjeta);
+  border: 1px solid var(--linea);
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.tarjeta:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(19, 27, 23, 0.08); }
+
+.meta { font-family: var(--mono); font-size: 11px; color: var(--gris); }
+
+.chip {
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  cursor: pointer;
+  border: 1px solid var(--linea);
+  background: var(--tarjeta);
+  color: var(--gris);
+}
+.chip.activo {
+  border-color: var(--verde);
+  background: var(--verde-suave);
+  color: var(--verde);
+  font-weight: 700;
+}
+
+.precio-pill {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 13px;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+.precio-gratis { color: var(--verde); background: var(--verde-suave); }
+.precio-pago { color: var(--ambar); background: var(--ambar-suave); }
+
+.cuadricula {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+}
+
+.aviso {
+  font-family: var(--mono);
+  font-size: 13px;
+  padding: 11px 16px;
+  border-radius: 8px;
+  background: var(--verde-suave);
+  color: var(--verde);
+}
+.aviso.error { background: #f7dede; color: #a02020; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tarjeta { transition: none; }
+  .tarjeta:hover { transform: none; }
+}
