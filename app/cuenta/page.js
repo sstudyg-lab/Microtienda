@@ -102,6 +102,14 @@ export default function Cuenta() {
         <button onClick={enviar} disabled={!valido || enviando} className="btn btn-bloque">
           {enviando ? "Un momento…" : modo === "entrar" ? "Entrar" : "Crear cuenta"}
         </button>
+        {modo === "registro" && (
+          <p className="meta" style={{ textAlign: "center", lineHeight: 1.5 }}>
+            Al crear una cuenta aceptas el{" "}
+            <a href="/aviso-legal" style={{ color: "var(--verde)", textDecoration: "underline" }}>aviso legal</a>{" "}
+            y la{" "}
+            <a href="/privacidad" style={{ color: "var(--verde)", textDecoration: "underline" }}>política de privacidad</a>.
+          </p>
+        )}
         {aviso && <p className={`aviso ${aviso.error ? "error" : ""}`}>{aviso.texto}</p>}
       </div>
     </div>

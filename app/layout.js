@@ -1,5 +1,6 @@
 import "./globals.css";
 import Cabecera from "@/components/Cabecera";
+import PiePagina from "@/components/PiePagina";
 
 export const metadata = {
   title: "microtienda_ | Microprogramas para tareas concretas",
@@ -10,11 +11,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="es">
-      <body>
+      <body style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
         <Cabecera />
-        <main className="contenedor" style={{ padding: "28px 20px 60px" }}>
+        <main className="contenedor" style={{ padding: "28px 20px 60px", flex: 1 }}>
           {children}
         </main>
+        <PiePagina />
       </body>
     </html>
   );
