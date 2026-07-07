@@ -1,6 +1,7 @@
 import "./globals.css";
 import Cabecera from "@/components/Cabecera";
 import PiePagina from "@/components/PiePagina";
+import { Analytics } from "@vercel/analytics/react";
 
 export const metadata = {
   title: "microtienda_ | Microprogramas para tareas concretas",
@@ -17,6 +18,7 @@ export default function RootLayout({ children }) {
           {children}
         </main>
         <PiePagina />
+        <Analytics />
       </body>
     </html>
   );
